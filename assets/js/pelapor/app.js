@@ -1,0 +1,364 @@
+/* ============================================================
+   PILAR – Main JavaScript
+   ============================================================ */
+
+'use strict';
+
+/* ---- Data Nyata dari Database ---- */
+// Mengambil array data laporan yang di-inject oleh PHP di halaman views
+const REPORTS = window.dbReports || [];
+
+const STATUS_MAP = {
+  menunggu:     { label: 'Menunggu',       cls: 'badge-menunggu' },
+  proses:       { label: 'Dalam Proses',   cls: 'badge-proses' },
+  selesai:      { label: 'Selesai',        cls: 'badge-selesai' },
+  ditolak:      { label: 'Ditolak',        cls: 'badge-ditolak' },
+  diverifikasi: { label: 'Diverifikasi',   cls: 'badge-diverifikasi' },
+};
+
+/* ---- Navigation ---- */
+function navigateTo(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.style.display = 'flex';
+  requestAnimationFrame(() => target.classList.add('active'));
+
+  if (id === 'screen-dashboard') {
+    renderDashboardReports();
+    setTimeout(triggerCountUp, 120);
+  }
+  if (id === 'screen-laporan') renderReports('semua');
+  closeSidebar();        // close mobile drawer on navigate
+  lucide.createIcons();
+}
+
+/* ---- Mobile Sidebar ---- */
+function openSidebar() {
+  document.querySelectorAll('.sidebar').forEach(s => s.classList.add('open'));
+  document.querySelectorAll('.sidebar-overlay').forEach(o => o.classList.add('open'));
+}
+function closeSidebar() {
+  document.querySelectorAll('.sidebar').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.sidebar-overlay').forEach(o => o.classList.remove('open'));
+}
+
+/* ---- Count-up animation ---- */
+function triggerCountUp() {
+  document.querySelectorAll('.count-up').forEach(counter => {
+    counter.textContent = '0';
+    const target = +counter.getAttribute('data-target');
+    if (!target) return;
+    let current = 0;
+    const step = Math.max(Math.floor(400 / target), 50);
+    const timer = setInterval(() => {
+      current++;
+      counter.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, step);
+  });
+}
+
+/* ---- Dashboard: recent reports ---- */
+function renderDashboardReports() {
+  const container = document.getElementById('recent-reports-container');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  if (REPORTS.length === 0) {
+    container.innerHTML = '<p style="font-size:0.8125rem;color:var(--muted);text-align:center;padding:1rem;">Belum ada laporan terbaru.</p>';
+    return;
+  }
+
+  REPORTS.slice(0, 3).forEach(r => {
+    const s = STATUS_MAP[r.status.toLowerCase()] || STATUS_MAP['menunggu'];
+    const div = document.createElement('div');
+    div.className = 'report-row';
+    div.onclick = () => openDetailModal(r);
+    div.innerHTML = `
+      <div class="report-icon"><i data-lucide="${r.icon}" class="w-5 h-5" style="color:var(--sky-deep)"></i></div>
+      <div class="report-info">
+        <p class="report-title-text">${r.title}</p>
+        <p class="report-meta">${r.date} · ${r.loc.split('·')[0].trim()}</p>
+      </div>
+      <span class="badge ${s.cls}">${s.label}</span>
+    `;
+    container.appendChild(div);
+  });
+  lucide.createIcons();
+}
+
+/* ---- Laporan page ---- */
+let currentFilter = 'semua';
+let currentSearch = '';
+
+function renderReports(filter) {
+  currentFilter = filter || currentFilter;
+
+  // Update filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active-filter');
+    if (btn.dataset.filter === currentFilter) btn.classList.add('active-filter');
+  });
+
+  const grid = document.getElementById('report-grid');
+  if (!grid) return;
+
+  let list = currentFilter === 'semua'
+    ? [...REPORTS]
+    : REPORTS.filter(r => r.status.toLowerCase() === currentFilter);
+
+  if (currentSearch.trim()) {
+    const q = currentSearch.toLowerCase();
+    list = list.filter(r => r.title.toLowerCase().includes(q));
+  }
+
+  grid.innerHTML = '';
+
+  if (list.length === 0) {
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:0.875rem;padding:2rem;">Tidak ada laporan ditemukan.</p>';
+    return;
+  }
+
+  list.forEach((r, i) => {
+    const s = STATUS_MAP[r.status.toLowerCase()] || STATUS_MAP['menunggu'];
+    const card = document.createElement('div');
+    card.className = 'report-card slide-up';
+    card.style.animationDelay = `${i * 0.05}s`;
+    
+    // Pengecekan gambar preview
+    const thumbnailHTML = r.image && r.image !== 'default.png'
+      ? `<img src="../../../assets/uploads/laporan/sebelum/${r.image}" style="width:100%;height:100%;object-fit:cover;border-radius:14px 14px 0 0;">`
+      : `<i data-lucide="${r.icon}" style="width:40px;height:40px;color:rgba(116,192,252,0.4)"></i>`;
+
+    card.innerHTML = `
+      <div class="report-card-thumb" onclick="openDetailModalById(${r.id})" style="position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+        ${thumbnailHTML}
+        <div style="position:absolute;top:0.75rem;right:0.75rem;z-index:10;">
+          <span class="badge ${s.cls}">${s.label}</span>
+        </div>
+      </div>
+      <div class="report-card-body" style="display: flex; flex-direction: column; gap: 0.25rem;">
+        <p class="report-card-title" onclick="openDetailModalById(${r.id})" style="font-weight: 600; color: var(--dark); margin: 0; cursor: pointer;">
+          ${r.title ? r.title : 'Tanpa Judul'}
+        </p>
+        
+        <p class="report-card-desc" style="font-size: 0.8125rem; color: var(--muted); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;">
+          ${r.desc ? r.desc : 'Tidak ada deskripsi tambahan.'}
+        </p>
+
+        <p class="report-card-loc" style="font-size: 0.75rem; color: var(--sky-deep); margin-top: 0.25rem; font-weight: 500;">
+          <i data-lucide="map-pin" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:2px;"></i>${r.loc}
+        </p>
+        
+        <div style="margin-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 0.5rem;">
+          <button class="chat-link" onclick="openChat(${r.id})">
+            <i data-lucide="message-circle" style="width:14px;height:14px"></i> Chat
+          </button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  lucide.createIcons();
+}
+
+function handleReportSearch() {
+  currentSearch = document.getElementById('report-search-bar')?.value || '';
+  renderReports(currentFilter);
+}
+
+function openDetailModalById(id) {
+  const r = REPORTS.find(item => item.id === id);
+  if (r) openDetailModal(r);
+}
+
+/* ---- Detail Modal ---- */
+function openDetailModal(report) {
+  const s = STATUS_MAP[report.status.toLowerCase()] || STATUS_MAP['menunggu'];
+  const content = document.getElementById('detail-content');
+  content.innerHTML = `
+    <div style="height:140px;background:linear-gradient(135deg,var(--light),rgba(165,216,255,0.2));border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;overflow:hidden">
+      ${report.image && report.image !== 'default.png' 
+        ? `<img src="../../../assets/uploads/laporan/sebelum/${report.image}" onclick="openFotoFullModal(this.src)" title="Klik untuk memperbesar" style="width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">` 
+        : `<i data-lucide="${report.icon}" style="width:56px;height:56px;color:rgba(116,192,252,0.4)"></i>`}
+    </div>
+   <div style="margin-bottom:1rem;text-align:left">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem">
+        <h3 style="font-size:1rem;font-weight:600;color:var(--dark)">${report.title}</h3>
+        <span class="badge ${s.cls}">${s.label}</span>
+      </div>
+      <p style="font-size:0.6875rem;color:var(--muted);margin-bottom:0.75rem">${report.loc} · ${report.date}</p>
+      
+      <div style="margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px dashed rgba(165,216,255,0.2);">
+        <p style="font-size:0.75rem; font-weight:600; color:var(--muted); margin-bottom:0.25rem; text-transform: uppercase; letter-spacing: 0.5px;">Detail Kerusakan:</p>
+        <p style="font-size:0.875rem; color:var(--dark); line-height:1.5; margin:0;">
+          ${report.desc ? report.desc : 'Tidak ada deskripsi tambahan.'}
+        </p>
+      </div>
+
+      <p style="font-size:0.8125rem;color:var(--dark);line-height:1.6;margin:0;">
+        Laporan ini sedang dalam tahap <b>${s.label}</b>. Gunakan fitur chat untuk menanyakan progress perbaikan fasilitas kepada admin.
+      </p>
+    </div>
+    <div style="display:flex;gap:0.75rem;padding-top:1rem;border-top:1px solid rgba(165,216,255,0.15)">
+      
+      <a href="data.php?edit=${report.id}" class="btn-outline-edit" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; flex: 1;">
+        <i data-lucide="pencil-line" style="width:16px;height:16px"></i> Edit Laporan
+      </a>
+      
+      <button class="btn-outline-delete" onclick="confirmAction('delete', ${report.id})" style="flex: 1;">
+        <i data-lucide="trash-2" style="width:16px;height:16px"></i> Hapus Laporan
+      </button>
+    </div>
+  `;
+  openModalEl('modal-detail');
+}
+
+/* ---- Laporan (baru) Modal ---- */
+function openModal()         { openModalEl('modal-laporan'); }
+function closeModal()        { closeModalEl('modal-laporan'); }
+function closeDetailModal() { closeModalEl('modal-detail'); }
+
+/* ---- Chat Modal ---- */
+// Membersihkan chat dummy statis agar siap diintegrasikan dengan database real/AJAX nanti
+function openChat(reportId = null) {
+  const msgContainer = document.getElementById('chat-messages');
+  if (msgContainer) {
+    msgContainer.innerHTML = '<p style="font-size:0.8125rem;color:var(--muted);text-align:center;padding:2rem;">Belum ada riwayat pesan.</p>';
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+  openModalEl('modal-chat');
+}
+function closeChat() { closeModalEl('modal-chat'); }
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input-message');
+  const val = input?.value.trim();
+  if (!val) return;
+  const container = document.getElementById('chat-messages');
+  
+  // Menghilangkan placeholder "belum ada pesan" jika ada pesan baru masuk
+  if(container.querySelector('p')) container.innerHTML = '';
+
+  const div = document.createElement('div');
+  div.className = 'bubble-user';
+  div.style.display = 'flex';
+  div.style.justifyContent = 'flex-end';
+  div.innerHTML = `<div class="bub"><span class="bub-label">Anda</span>${val}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  input.value = '';
+}
+
+/* ---- Confirm Modal ---- */
+function confirmAction(type, id = null) {
+  const iconWrap = document.getElementById('confirm-icon-container');
+  const title    = document.getElementById('confirm-title');
+  const desc     = document.getElementById('confirm-desc');
+  const btn      = document.getElementById('confirm-btn-primary');
+
+  if (type === 'logout') {
+    iconWrap.style.background = 'var(--blush)';
+    iconWrap.innerHTML = '<i data-lucide="log-out" style="width:40px;height:40px;color:#e03131"></i>';
+    title.textContent = 'Keluar Akun';
+    desc.textContent  = 'Apakah anda yakin ingin keluar dari aplikasi PILAR?';
+    btn.textContent   = 'Keluar';
+    btn.style.cssText = 'background:#e03131;color:white;box-shadow:0 4px 12px rgba(224,49,49,0.3)';
+    btn.onclick       = () => { closeConfirm(); navigateTo('screen-login'); };
+  } else if (type === 'delete') {
+    iconWrap.style.background = 'var(--sand)';
+    iconWrap.innerHTML = '<i data-lucide="trash-2" style="width:40px;height:40px;color:#f59f00"></i>';
+    title.textContent = 'Hapus Laporan';
+    desc.textContent  = 'Tindakan ini tidak bisa dibatalkan. Hapus laporan ini?';
+    btn.textContent   = 'Hapus';
+    btn.style.cssText = 'background:#f59f00;color:white;box-shadow:0 4px 12px rgba(245,159,0,0.3)';
+    
+    btn.onclick       = () => { window.location.href = `../../../controllers/laporanSaya.php?delete=${id}`; };
+  }
+
+  openModalEl('modal-confirm');
+}
+function closeConfirm() { closeModalEl('modal-confirm'); }
+
+/* ---- Profile ---- */
+function handleProfilePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = e.target.result;
+    document.querySelectorAll('.profile-avatar-el, .global-profile-photo').forEach(el => {
+      el.style.backgroundImage = `url('${url}')`;
+      el.textContent = '';
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleUpdateProfile(e) {
+  e.preventDefault();
+  const name     = document.getElementById('profile-input-name')?.value     || '';
+  const username = document.getElementById('profile-input-username')?.value || '';
+  const category = document.getElementById('profile-input-category')?.value || '';
+
+  document.querySelectorAll('.profile-card-name-el').forEach(el => el.textContent = name);
+  document.querySelectorAll('.profile-card-category-el').forEach(el => el.textContent = category);
+  document.querySelectorAll('.profile-card-username-el').forEach(el => el.textContent = '@' + username);
+  document.querySelectorAll('.global-profile-name').forEach(el => el.textContent = name);
+  document.querySelectorAll('.global-profile-category').forEach(el => el.textContent = category);
+
+  // Update initials if no photo
+  const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  document.querySelectorAll('.profile-avatar-el, .global-profile-photo').forEach(el => {
+    if (!el.style.backgroundImage) el.textContent = initials;
+  });
+
+  showToast('Informasi Profil Berhasil Disimpan! 📝');
+}
+
+/* ---- Toast ---- */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ---- Modal helpers ---- */
+function openModalEl(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('open');
+  lucide.createIcons();
+}
+function closeModalEl(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+/* ---- Close modals on overlay click ---- */
+document.addEventListener('click', e => {
+  // Tambahkan 'modal-foto-full' ke dalam daftar array ini
+  ['modal-laporan', 'modal-detail', 'modal-chat', 'modal-confirm', 'modal-foto-full'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && e.target === el) closeModalEl(id);
+  });
+});
+
+/* ---- Enter to send chat ---- */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('modal-chat')?.classList.contains('open')) {
+    const focused = document.getElementById('chat-input-message');
+    if (document.activeElement === focused) sendChatMessage();
+  }
+});
+
+/* ---- Init ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  renderDashboardReports();
+  setTimeout(triggerCountUp, 200);
+});
