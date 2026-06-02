@@ -1,11 +1,9 @@
 <?php
 /**
  * partials/mobile-header.php
- * Fixed top bar shown on mobile (<= 768px).
- * Includes hamburger to open the sidebar drawer.
+ * Proyek PILAR - Mobile Fixed Header Bar
  */
 ?>
-
 <!-- =====================  MOBILE HEADER  ===================== -->
 <header class="mobile-header">
   <div class="mobile-brand">

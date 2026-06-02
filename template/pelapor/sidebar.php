@@ -1,22 +1,29 @@
 <?php
 /**
  * partials/sidebar.php
- * Shared sidebar navigation.
- * Usage: <?php include 'partials/sidebar.php'; ?>
- *
- * @param string $active  One of: 'dashboard' | 'laporan' | 'profile'
+ * Proyek PILAR - Navigasi Samping Dinamis Pelapor
  */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/../../koneksi.php';
+
+$id_log = $_SESSION['id_user'] ?? 1; 
+$query_side = mysqli_query($host, "SELECT nama, username, status_pengguna, foto FROM `user` WHERE id_user = '$id_log'");
+$user_side = mysqli_fetch_assoc($query_side);
+
+$nama_panggilan = $user_side['nama'] ?? 'Pelapor';
+$inisial = strtoupper(substr($nama_panggilan, 0, 2));
 $active = $active ?? 'dashboard';
 
 function navItem(string $label, string $icon, string $url, string $current, string $key): string {
     $cls = ($current === $key) ? 'nav-item active' : 'nav-item';
-    
     return <<<HTML
     <a href="{$url}" class="{$cls}" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem; width: 100%; border: none;">
         <i data-lucide="{$icon}"></i>
         <span>{$label}</span>
     </a>
-    HTML;
+HTML;
 }
 ?>
 
@@ -38,19 +45,23 @@ function navItem(string $label, string $icon, string $url, string $current, stri
   <!-- User card -->
   <div class="sidebar-user float-anim">
     <div class="sidebar-user-inner">
-      <div class="avatar global-profile-photo">TJ</div>
+      <?php if (!empty($user_side['foto']) && $user_side['foto'] !== 'default.png' && file_exists(__DIR__ . '/../../assets/uploads/user/' . $user_side['foto'])): ?>
+        <img src="/pilar/assets/uploads/user/<?= $user_side['foto'] ?>" class="avatar" style="width:32px; height:32px; border-radius:12px; object-fit: cover;">
+      <?php else: ?>
+        <div class="avatar global-profile-photo"><?= $inisial ?></div>
+      <?php endif; ?>
       <div style="min-width:0">
-        <p class="avatar-name global-profile-name">Taufik Jr</p>
-        <p class="avatar-role global-profile-category">Mahasiswa</p>
+        <p class="avatar-name global-profile-name"><?= htmlspecialchars($nama_panggilan) ?></p>
+        <p class="avatar-role global-profile-category" style="text-transform: capitalize;"><?= htmlspecialchars($user_side['status_pengguna'] ?? 'Umum') ?></p>
       </div>
     </div>
   </div>
 
   <!-- Logout -->
-  <button onclick="confirmAction('logout')" class="sidebar-logout">
-    <i data-lucide="log-out" style="width:16px;height:16px"></i>
-    Keluar
-  </button>
+  <a href="../../../controllers/Logout.php" class="sidebar-logout" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+      <i data-lucide="log-out" style="width:16px;height:16px"></i>
+      Keluar
+  </a>
 
 </aside>
 

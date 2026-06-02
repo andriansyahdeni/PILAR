@@ -1,9 +1,19 @@
 <?php
 /**
- * partials/modals.php
- * All global modal overlays (laporan baru, detail, chat, confirm).
- * Include once, near </body>.
+ * template/pelapor/modals.php
+ * Proyek PILAR - Semua komponen modal overlays (laporan baru, detail, chat, confirm, zoom foto)
  */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/../../koneksi.php';
+
+$id_log = $_SESSION['id_user'] ?? 1;
+$query_modal = mysqli_query($host, "SELECT nama FROM `user` WHERE id_user = '$id_log'");
+$user_modal = mysqli_fetch_assoc($query_modal);
+
+$mode_edit = $mode_edit ?? false;
+$data_edit = $data_edit ?? [];
 ?>
 
 <div id="modal-laporan" class="modal-overlay">
@@ -18,18 +28,18 @@
 
     <form action="../../../controllers/laporanSaya.php<?= $mode_edit ? '?id_laporan='.$data_edit['id_laporan'] : ''; ?>" method="POST" enctype="multipart/form-data">
 
-      <input type="hidden" name="id_pelapor" value="1">
+      <input type="hidden" name="id_pelapor" value="<?= $id_log; ?>">
       <?php if ($mode_edit): ?>
         <input type="hidden" name="foto_lama" value="<?= $data_edit['foto_sebelum']; ?>">
         <input type="hidden" name="status" value="<?= $data_edit['status']; ?>">
       <?php endif; ?>
 
       <div class="grid-cols-2-modal" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
-        <input type="text" value="Taufik Jr" disabled class="form-input" style="color:var(--muted);cursor:not-allowed;opacity:.65">
+        <input type="text" value="<?= htmlspecialchars($user_modal['nama'] ?? 'Pelapor'); ?>" disabled class="form-input" style="color:var(--muted);cursor:not-allowed;opacity:.65">
         <input type="text" value="<?= $mode_edit ? date('d M Y', strtotime($data_edit['tanggal_laporan'])) : date('d M Y'); ?>" disabled class="form-input" style="color:var(--muted);cursor:not-allowed;opacity:.65">
       </div>
 
-      <select id="dropdown-kampus" class="form-select" style="margin-bottom:1rem" onchange="pilihKampus()" required>
+      <select id="dropdown-kampus" name="id_kampus" class="form-select" style="margin-bottom:1rem" onchange="pilihKampus()" required>
         <option value="">Pilih Kampus</option>
         <?php
         $query_kampus = mysqli_query($host, "SELECT * FROM kampus");
@@ -41,7 +51,7 @@
       </select>
 
       <div class="grid-cols-2-modal" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
-        <select id="dropdown-gedung" class="form-select" onchange="pilihGedung()" required>
+        <select id="dropdown-gedung" name="id_gedung" class="form-select" onchange="pilihGedung()" required>
           <option value="">Pilih Gedung</option>
           <?php
           if ($mode_edit) {
@@ -69,7 +79,7 @@
       </div>
 
       <input type="text" name="judul_laporan" placeholder="Judul Pengaduan" 
-             value="<?= $mode_edit ? $data_edit['judul_laporan'] : ''; ?>" 
+             value="<?= $mode_edit ? htmlspecialchars($data_edit['judul_laporan']) : ''; ?>" 
              class="form-input" style="margin-bottom:1rem;" required>
 
       <div class="upload-zone" onclick="document.getElementById('file-input-modal').click()" style="margin-bottom:1rem; cursor:pointer;">
@@ -81,9 +91,9 @@
       </div>
 
       <textarea name="deskripsi" placeholder="Detail kerusakan..." rows="3" 
-                class="form-input" style="resize:none;margin-bottom:1.5rem" required><?= $mode_edit ? $data_edit['deskripsi'] : ''; ?></textarea>
+                class="form-input" style="resize:none;margin-bottom:1.5rem" required><?= $mode_edit ? htmlspecialchars($data_edit['deskripsi']) : ''; ?></textarea>
 
-      <button type="submit" name="<?= $mode_edit ? 'update' : 'tambah'; ?>" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:0.5rem">
+      <button type="submit" name="<?= $mode_edit ? 'update' : 'tambah'; ?>" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:0.5rem; width:100%;">
         <i data-lucide="<?= $mode_edit ? 'save' : 'send'; ?>" style="width:16px;height:16px"></i>
         <?= $mode_edit ? 'Simpan Perubahan' : 'Kirim Laporan'; ?>
       </button>
@@ -92,7 +102,6 @@
 </div>
 
 <script>
-// JavaScript AJAX Penyelaras Tingkat Folder Absolut
 function pilihKampus() {
     const idKampus = document.getElementById('dropdown-kampus').value;
     const dropdownGedung = document.getElementById('dropdown-gedung');
@@ -129,7 +138,6 @@ function pilihGedung() {
 }
 </script>
 
-
 <div id="modal-detail" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
@@ -142,21 +150,17 @@ function pilihGedung() {
   </div>
 </div>
 
-
 <div id="modal-chat" class="modal-overlay" style="z-index:60">
   <div class="chat-modal-box">
-
     <div class="chat-header">
       <p class="chat-header-title">PILAR – CHAT</p>
       <p class="chat-header-sub" id="chat-header-subtitle">AC Ruang Kelas Bocor</p>
-      <p class="chat-header-participants" id="chat-header-participants">Admin, Pelapor (Taufik Jr), Teknisi (Belum Ada)</p>
+      <p class="chat-header-participants" id="chat-header-participants">Admin, Pelapor, Teknisi</p>
       <button onclick="closeChat()" class="chat-close">
         <i data-lucide="x" style="width:20px;height:20px"></i>
       </button>
     </div>
-
     <div class="chat-body" id="chat-messages"></div>
-
     <div class="chat-footer">
       <div class="chat-input-wrap">
         <input type="text" id="chat-input-message" placeholder="Ketik pesanmu...">
@@ -165,10 +169,8 @@ function pilihGedung() {
         </button>
       </div>
     </div>
-
   </div>
 </div>
-
 
 <div id="modal-confirm" class="modal-overlay" style="z-index:100">
   <div class="confirm-box">
@@ -181,7 +183,6 @@ function pilihGedung() {
     </div>
   </div>
 </div>
-
 
 <div id="toast"></div>
 
@@ -203,7 +204,6 @@ function openFotoFullModal(src) {
         modal.classList.add('open');
     }
 }
-
 function closeFotoFullModal() {
     const modal = document.getElementById('modal-foto-full');
     if (modal) {

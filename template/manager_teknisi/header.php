@@ -4,6 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PILAR - Manager Teknisi Portal</title>
+
+  <style>
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    @keyframes pulse-gentle {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(165,216,255,0.25); }
+      50%       { transform: scale(1.005); box-shadow: 0 0 20px 8px rgba(165,216,255,0.1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .float-anim { animation: floatUp 3s ease-in-out infinite; }
+    .slide-up { animation: slideUp 0.4s ease forwards; }
+  </style>
   
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
