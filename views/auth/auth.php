@@ -3,432 +3,524 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PILAR — Pusat Informasi dan Laporan Aset yang Rusak</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>PILAR — Masuk atau Daftar</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg:       #fdf6f0;
-    --white:    #ffffff;
-    --pink:     #f472b6;
-    --pink-lt:  #fce7f3;
-    --blue:     #60a5fa;
-    --blue-dk:  #3b82f6;
-    --text:     #1e293b;
-    --muted:    #94a3b8;
-    --border:   #e2e8f0;
-    --ok:       #22c55e;
-    --danger:   #ef4444;
-    --warn:     #f59e0b;
-    --radius:   18px;
-    --shadow:   0 8px 40px rgba(0,0,0,.08);
-    --trans:    .22s cubic-bezier(.4,0,.2,1);
-  }
+:root {
+  --blue:       #2563EB;
+  --blue-dark:  #1D4ED8;
+  --blue-soft:  #EFF6FF;
+  --blue-mid:   #BFDBFE;
+  --orange:     #F97316;
+  --text:       #111827;
+  --text-mid:   #374151;
+  --muted:      #9CA3AF;
+  --bg:         #F3F4F6;
+  --white:      #FFFFFF;
+  --border:     #E5E7EB;
+  --ok:         #22C55E;
+  --ok-soft:    #DCFCE7;
+  --danger:     #EF4444;
+  --danger-soft:#FEE2E2;
+  --radius:     20px;
+  --radius-sm:  10px;
+  --trans:      .2s cubic-bezier(.4,0,.2,1);
+}
 
-  body {
-    min-height: 100vh;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text);
-  }
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 
-  /* ── top bar ── */
-  .topbar {
-    width: 100%;
-    padding: 18px 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .back-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 20px; color: var(--muted);
-    transition: color var(--trans);
-  }
-  .back-btn:hover { color: var(--text); }
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  display: flex;
+}
 
-  /* ── header ── */
-  .header {
-    text-align: center;
-    padding: 10px 20px 28px;
-    animation: fadeDown .5s ease both;
-  }
-  .logo-placeholder {
-    width: 64px; height: 64px;
-    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 10px;
-    font-size: 28px;
-  }
-  .brand-name {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: var(--blue-dk);
-    margin-bottom: 2px;
-  }
-  .brand-sub {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .page-title {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.15;
-    margin-bottom: 8px;
-  }
-  .page-desc {
-    font-size: 13.5px;
-    color: var(--muted);
-    max-width: 380px;
-    line-height: 1.6;
-  }
+/* ── LEFT PANEL ── */
+.left {
+  flex: 1;
+  background: var(--blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* ── main layout ── */
-  .main {
-    display: flex;
-    align-items: flex-start;
-    gap: 48px;
-    padding: 0 40px 60px;
-    width: 100%;
-    max-width: 960px;
-    animation: fadeUp .5s ease both .1s;
-  }
+/* animated blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.blob-1 {
+  top: -15%; right: -15%;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 65%);
+  animation: blobDrift 9s ease-in-out infinite;
+}
+.blob-2 {
+  bottom: -10%; left: -10%;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(249,115,22,0.2) 0%, transparent 65%);
+  animation: blobDrift 12s ease-in-out infinite reverse;
+}
+.blob-3 {
+  top: 40%; left: 5%;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+  animation: blobDrift 7s ease-in-out infinite 2s;
+}
+@keyframes blobDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(18px, -22px) scale(1.06); }
+  66%       { transform: translate(-14px, 14px) scale(0.96); }
+}
 
-  /* ── logo side ── */
-  .logo-side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 30px;
-    flex-shrink: 0;
-  }
-  .logo-big {
-    width: 200px; height: 200px;
-    background: linear-gradient(145deg, #1e40af, #0284c7, #0ea5e9);
-    border-radius: 28px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 80px;
-    margin-bottom: 16px;
-    box-shadow: 0 12px 40px #1d4ed833;
-  }
-  .logo-big-label {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 3px;
-    color: #1d4ed8;
-  }
-  .logo-big-sub {
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    max-width: 180px;
-    line-height: 1.5;
-    margin-top: 4px;
-  }
+/* dot grid */
+.left-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  animation: dotsDrift 20s linear infinite;
+}
+@keyframes dotsDrift {
+  from { background-position: 0 0; }
+  to   { background-position: 32px 32px; }
+}
 
-  /* ── card ── */
-  .card {
-    flex: 1;
-    background: var(--white);
-    border-radius: var(--radius);
-    padding: 36px 40px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
+/* shimmer line that sweeps across */
+.left-shimmer {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation: shimmerSweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes shimmerSweep {
+  0%   { left: -60%; }
+  100% { left: 120%; }
+}
 
-  /* ── input field ── */
-  .field { margin-bottom: 16px; }
+.left-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 28px;
+}
 
-  .input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .input-wrap input {
-    width: 100%;
-    padding: 14px 48px 14px 18px;
-    background: #f8fafc;
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    transition: var(--trans);
-  }
-  .input-wrap input::placeholder { color: var(--muted); }
-  .input-wrap input:focus {
-    border-color: var(--blue);
-    background: #fff;
-    box-shadow: 0 0 0 3px #60a5fa22;
-  }
-  .input-wrap input.valid   { border-color: var(--ok);     box-shadow: 0 0 0 3px #22c55e18; }
-  .input-wrap input.invalid { border-color: var(--danger);  box-shadow: 0 0 0 3px #ef444418; }
+.left-logo {
+  height: 120px;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+  animation: logoEntrance .8s cubic-bezier(.22,1,.36,1) both,
+             logoFloat 5s ease-in-out 1s infinite;
+}
+@keyframes logoEntrance {
+  from { opacity: 0; transform: translateY(-20px) scale(0.9); }
+  to   { opacity: 0.95; transform: translateY(0) scale(1); }
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
 
-  .input-icon {
-    position: absolute; right: 14px;
-    color: var(--muted); font-size: 17px;
-    pointer-events: none;
-  }
-  .eye-btn {
-    position: absolute; right: 14px;
-    background: none; border: none;
-    color: var(--muted); font-size: 16px;
-    cursor: pointer; padding: 0;
-    transition: color var(--trans);
-  }
-  .eye-btn:hover { color: var(--text); }
+.left-divider {
+  width: 48px; height: 2px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  animation: expandIn .6s .3s ease both;
+}
+@keyframes expandIn {
+  from { width: 0; opacity: 0; }
+  to   { width: 48px; opacity: 1; }
+}
 
-  /* select */
-  .input-wrap select {
-    width: 100%;
-    padding: 14px 18px;
-    background: #f8fafc;
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    transition: var(--trans);
-    appearance: none;
-    cursor: pointer;
-  }
-  .input-wrap select:focus {
-    border-color: var(--blue);
-    background: #fff;
-    box-shadow: 0 0 0 3px #60a5fa22;
-  }
+.left-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  animation: fadeUp .7s .4s ease both;
+}
+.left-title span { color: rgba(255,255,255,0.65); }
 
-  /* remeber row */
-  .row-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    font-size: 13px;
-  }
-  .check-label {
-    display: flex; align-items: center; gap: 7px;
-    cursor: pointer; color: var(--text);
-    user-select: none;
-  }
-  .check-label input[type=checkbox] { accent-color: var(--blue-dk); width: 15px; height: 15px; }
-  .forgot { color: var(--blue-dk); text-decoration: none; font-weight: 500; font-size: 13px; }
-  .forgot:hover { text-decoration: underline; }
+.left-desc {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  max-width: 260px;
+  animation: fadeUp .7s .5s ease both;
+}
 
-  /* pw strength */
-  .pw-strength { margin-top: 10px; display: none; }
-  .bar-wrap { display: flex; gap: 4px; margin-bottom: 9px; }
-  .bar-seg {
-    flex: 1; height: 4px; border-radius: 4px;
-    background: var(--border);
-    transition: background var(--trans);
-  }
-  .strength-lbl {
-    font-size: 11px; font-weight: 600;
-    letter-spacing: .4px; text-transform: uppercase;
-    margin-bottom: 8px; color: var(--muted);
-  }
-  .req-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-  .req-item {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12.5px; color: var(--muted);
-    transition: color var(--trans);
-  }
-  .req-item.ok   { color: var(--ok); }
-  .req-item.fail { color: var(--danger); }
-  .req-dot {
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 1.5px solid var(--muted);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 9px; flex-shrink: 0;
-    transition: var(--trans);
-  }
-  .req-item.ok   .req-dot { border-color: var(--ok);    background: #dcfce7; color: var(--ok); }
-  .req-item.fail .req-dot { border-color: var(--danger); background: #fee2e2; color: var(--danger); }
+.left-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 280px;
+}
+.left-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px 14px;
+  transition: all .25s ease;
+  cursor: default;
+}
+.left-chip:nth-child(1) { animation: slideChip .6s .6s ease both; }
+.left-chip:nth-child(2) { animation: slideChip .6s .75s ease both; }
+.left-chip:nth-child(3) { animation: slideChip .6s .9s ease both; }
+@keyframes slideChip {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.left-chip:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateX(5px);
+}
+.left-chip i {
+  font-size: 18px; color: rgba(255,255,255,0.85); flex-shrink: 0;
+  transition: transform .25s ease;
+}
+.left-chip:hover i { transform: scale(1.2) rotate(-5deg); }
+.left-chip span { font-size: 0.8rem; color: rgba(255,255,255,0.75); font-weight: 500; }
 
-  /* buttons */
-  .btn-pink {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, #f9a8d4, #f472b6);
-    color: #fff; border: none; border-radius: 12px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: var(--trans);
-    box-shadow: 0 4px 16px #f472b633;
-    margin-bottom: 16px;
-  }
-  .btn-pink:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px #f472b655; }
-  .btn-pink:active { transform: translateY(0); }
-  .btn-pink:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+/* ── RIGHT PANEL ── */
+.right {
+  width: 420px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 28px;
+  background: var(--white);
+  overflow-y: auto;
+}
 
-  .btn-blue {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, var(--blue), var(--blue-dk));
-    color: #fff; border: none; border-radius: 12px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: var(--trans);
-    box-shadow: 0 4px 16px #3b82f633;
-    margin-bottom: 16px;
-  }
-  .btn-blue:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px #3b82f655; }
-  .btn-blue:active { transform: translateY(0); }
-  .btn-blue:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.right-inner {
+  width: 100%;
+  max-width: 360px;
+}
 
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 12px; color: var(--muted); font-size: 12px;
-  }
-  .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 28px;
+  transition: color var(--trans);
+}
+.back-btn i { font-size: 16px; }
+.back-btn:hover { color: var(--blue); }
 
-  .bottom-note {
-    text-align: center; font-size: 13px;
-    color: var(--muted); margin-top: 6px;
-  }
-  .hint-text { font-size: 12.5px; color: var(--muted); text-align: center; }
+.form-header { margin-bottom: 22px; }
+.form-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.form-header p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
 
-  .switch-text {
-    text-align: center; font-size: 13.5px;
-    color: var(--muted); margin-top: 24px;
-  }
-  .switch-text a {
-    color: var(--blue-dk); font-weight: 600;
-    text-decoration: none;
-  }
-  .switch-text a:hover { text-decoration: underline; }
+/* alert */
+.alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 14px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+.alert i { font-size: 16px; flex-shrink: 0; }
+.alert.show    { display: flex; animation: fadeUp .2s ease both; }
+.alert.success { background: var(--ok-soft); border: 1px solid #86EFAC; color: #15803D; }
+.alert.error   { background: var(--danger-soft); border: 1px solid #FCA5A5; color: #B91C1C; }
+.alert.info    { background: var(--blue-soft); border: 1px solid var(--blue-mid); color: var(--blue-dark); }
 
-  .alert {
-    padding: 11px 14px; border-radius: 10px;
-    font-size: 13px; margin-bottom: 14px;
-    display: none;
-  }
-  .alert.show    { display: block; animation: fadeUp .25s ease both; }
-  .alert.success { background: #dcfce7; border: 1px solid #86efac; color: #15803d; }
-  .alert.error   { background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; }
-  .alert.info    { background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; }
+/* field */
+.field { margin-bottom: 10px; }
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-bottom: 5px;
+  letter-spacing: 0.01em;
+}
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-wrap input,
+.input-wrap select {
+  width: 100%;
+  padding: 10px 38px 10px 12px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.84rem;
+  color: var(--text);
+  outline: none;
+  transition: var(--trans);
+}
+.input-wrap select { padding-right: 12px; appearance: none; cursor: pointer; }
+.input-wrap input::placeholder { color: var(--muted); font-size: 0.82rem; }
+.input-wrap input:focus,
+.input-wrap select:focus {
+  border-color: var(--blue);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.input-wrap input.valid   { border-color: var(--ok);     box-shadow: 0 0 0 3px rgba(34,197,94,0.1); }
+.input-wrap input.invalid { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+.input-wrap input[readonly] { color: var(--muted); cursor: default; }
 
-  .spinner {
-    display: inline-block; width: 13px; height: 13px;
-    border: 2px solid #ffffff66; border-top-color: #fff;
-    border-radius: 50%; animation: spin .6s linear infinite;
-    vertical-align: middle; margin-right: 6px;
-  }
-  @keyframes spin    { to { transform: rotate(360deg); } }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(12px)}  to{opacity:1;transform:translateY(0)} }
+.input-icon {
+  position: absolute; right: 11px;
+  color: var(--muted); font-size: 16px;
+  pointer-events: none;
+}
+.eye-btn {
+  position: absolute; right: 11px;
+  background: none; border: none;
+  color: var(--muted); font-size: 16px;
+  cursor: pointer; padding: 0;
+  display: flex; align-items: center;
+  transition: color var(--trans);
+}
+.eye-btn:hover { color: var(--text); }
 
-  .section { display: none; }
-  .section.active { display: block; animation: fadeUp .3s ease both; }
+.autofill-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.7rem; color: var(--blue); font-weight: 600; margin-top: 4px;
+}
+.autofill-tag i { font-size: 11px; }
 
-  @media (max-width: 680px) {
-    .logo-side { display: none; }
-    .main { padding: 0 16px 40px; }
-    .card { padding: 28px 22px; }
-    .page-title { font-size: 28px; }
-  }
+/* pw strength */
+.pw-strength { margin-top: 8px; display: none; }
+.bar-wrap { display: flex; gap: 3px; margin-bottom: 7px; }
+.bar-seg { flex: 1; height: 3px; border-radius: 4px; background: var(--border); transition: background var(--trans); }
+.strength-lbl { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; color: var(--muted); }
+.req-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.req-item { display: flex; align-items: center; gap: 7px; font-size: 0.74rem; color: var(--muted); transition: color var(--trans); }
+.req-item.ok   { color: var(--ok); }
+.req-item.fail { color: var(--danger); }
+.req-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; transition: var(--trans); }
+.req-item.ok   .req-dot { border-color: var(--ok);    background: var(--ok-soft);     color: var(--ok); }
+.req-item.fail .req-dot { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+
+/* submit btn */
+.btn-submit {
+  width: 100%; padding: 11px;
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; transition: all var(--trans);
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 16px; margin-bottom: 14px;
+}
+.btn-submit i { font-size: 17px; }
+.btn-submit.orange {
+  background: var(--orange); color: white;
+  box-shadow: 0 4px 14px rgba(249,115,22,0.3);
+}
+.btn-submit.orange:hover  { background: #EA6C0A; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.4); }
+.btn-submit.blue {
+  background: var(--blue); color: white;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+}
+.btn-submit.blue:hover    { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,0.4); }
+.btn-submit:active        { transform: translateY(0); }
+.btn-submit:disabled      { opacity: .5; cursor: not-allowed; transform: none; }
+
+.switch-text { text-align: center; font-size: 0.8rem; color: var(--muted); }
+.switch-text a { color: var(--blue); font-weight: 700; text-decoration: none; }
+.switch-text a:hover { color: var(--orange); }
+
+/* spinner */
+.spinner {
+  display: inline-block; width: 13px; height: 13px;
+  border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+  border-radius: 50%; animation: spin .6s linear infinite;
+}
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes fadeUp  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.section { display: none; }
+.section.active { display: block; animation: fadeUp .25s ease both; }
+
+/* responsive */
+@media (max-width: 720px) {
+  html, body { overflow: auto; height: auto; }
+  body { flex-direction: column; }
+  .left { padding: 40px 24px; min-height: auto; }
+  .left-logo { height: 80px; }
+  .left-chips { display: none; }
+  .right { width: 100%; padding: 28px 24px 48px; }
+}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <button class="back-btn" onclick="window.location.href='../../index.php'">&#8592;</button>
-</div>
+<!-- ── LEFT ── -->
+<div class="left">
+  <div class="left-dots"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="left-shimmer"></div>
+  <div class="left-inner">
 
-<div class="header" id="pageHeader">
-  <div class="logo-placeholder">🏛️</div>
-  <div class="brand-name">PILAR</div>
-  <div class="brand-sub">Pusat Informasi dan Laporan Aset yang Rusak</div>
-  <div class="page-title" id="pageTitle">Selamat Datang</div>
-  <div class="page-desc" id="pageDesc">Masuk akunmu dan lanjutkan pelaporan fasilitas yang rusak! 👋</div>
-</div>
+    <img src="../../assets/img/logo_vertikal.png" class="left-logo" alt="PILAR">
 
-<div class="main">
+    <div class="left-divider"></div>
 
-  <div class="logo-side">
-    <div class="logo-big">🏛️</div>
-    <div class="logo-big-label">PILAR</div>
-    <div class="logo-big-sub">Pusat Informasi dan Laporan Aset yang Rusak</div>
-  </div>
+    <p class="left-title">
+      Satu tempat buat<br>
+      <span>lapor semua kerusakan</span>
+    </p>
 
-  <div class="card">
-    <div class="alert" id="alertBox"></div>
+    <p class="left-desc">
+      Foto, tulis lokasi, kirim — tim kami langsung gerak. Nggak ribet, nggak lama.
+    </p>
 
-    <div class="section active" id="loginSection">
-      <div class="field">
-        <div class="input-wrap">
-          <input type="text" id="loginIdentifier" placeholder="Email atau Username">
-          <span class="input-icon">✉️</span>
-        </div>
+    <div class="left-chips">
+      <div class="left-chip">
+        <i class="ti ti-camera"></i>
+        <span>Foto & kirim dalam hitungan detik</span>
       </div>
-
-      <div class="field">
-        <div class="input-wrap">
-          <input type="password" id="loginPassword" placeholder="Password">
-          <button class="eye-btn" type="button" onclick="toggleEye('loginPassword',this)">👁</button>
-        </div>
+      <div class="left-chip">
+        <i class="ti ti-eye"></i>
+        <span>Pantau status laporan real-time</span>
       </div>
-
-      <div class="row-flex">
-        <label class="check-label">
-          <input type="checkbox" id="rememberMe"> Ingat Saya
-        </label>
-        <a href="#" class="forgot">Lupa Password?</a>
-      </div>
-
-      <button class="btn-pink" id="loginBtn" onclick="doLogin()">Masuk Sekarang</button>
-      <div class="divider">or</div>
-      <div class="hint-text">Akses mudah, lebih aman, dan lebih cepat untuk melapor! 😊</div>
-      <div class="switch-text">
-        Belum memiliki akun? <a href="#" onclick="switchTo('register')">Daftar Disini</a>
+      <div class="left-chip">
+        <i class="ti ti-messages"></i>
+        <span>Chat langsung sama teknisi</span>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ── RIGHT ── -->
+<div class="right">
+  <div class="right-inner">
+
+    <button class="back-btn" onclick="window.location.href='../../index.php'">
+      <i class="ti ti-arrow-left"></i>
+      Kembali
+    </button>
+
+    <div class="form-header">
+      <h2 id="pageTitle">Halo, selamat datang!</h2>
+      <p id="pageDesc">Masuk biar kamu bisa bikin laporan dan pantau statusnya.</p>
+    </div>
+
+    <div class="alert" id="alertBox"></div>
+
+    <!-- LOGIN -->
+    <div class="section active" id="loginSection">
+
+      <div class="field">
+        <label class="field-label">Email atau Username</label>
+        <div class="input-wrap">
+          <input type="text" id="loginIdentifier" placeholder="Email atau username kamu">
+          <i class="ti ti-user input-icon"></i>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="loginPassword" placeholder="Password kamu">
+          <button class="eye-btn" type="button" onclick="toggleEye('loginPassword',this)"><i class="ti ti-eye"></i></button>
+        </div>
+      </div>
+
+      <button class="btn-submit blue" id="loginBtn" onclick="doLogin()">
+        <i class="ti ti-login"></i>
+        Masuk Sekarang
+      </button>
+
+      <div class="switch-text">
+        Belum punya akun? <a href="#" onclick="switchTo('register')">Daftar di sini</a>
+      </div>
+    </div>
+
+    <!-- REGISTER -->
     <div class="section" id="registerSection">
+
+      <button class="back-btn" onclick="switchTo('login')">
+        <i class="ti ti-arrow-left"></i>
+        Kembali ke login
+      </button>
+
       <div class="field">
+        <label class="field-label">Nama Lengkap</label>
         <div class="input-wrap">
-          <input type="text" id="regNama" placeholder="Nama Lengkap">
-          <span class="input-icon">👤</span>
+          <input type="text" id="regNama" placeholder="Nama lengkap kamu">
+          <i class="ti ti-user input-icon"></i>
         </div>
       </div>
 
       <div class="field">
+        <label class="field-label">Email</label>
         <div class="input-wrap">
-          <input type="email" id="regEmail" placeholder="Email">
-          <span class="input-icon">✉️</span>
+          <input type="email" id="regEmail" placeholder="Email aktif kamu">
+          <i class="ti ti-mail input-icon"></i>
         </div>
       </div>
 
       <div class="field">
+        <label class="field-label">Username</label>
         <div class="input-wrap">
-          <input type="text" id="regUsername" placeholder="Username">
-          <span class="input-icon">👤</span>
+          <input type="text" id="regUsername" placeholder="Buat username unik">
+          <i class="ti ti-at input-icon"></i>
         </div>
       </div>
 
       <div class="field">
+        <label class="field-label">Kategori Pengguna</label>
         <div class="input-wrap">
           <select id="regKategori">
-            <option value="">-- Kategori Pengguna --</option>
+            <option value="">-- Pilih kategori --</option>
             <option value="mahasiswa">Mahasiswa</option>
             <option value="dosen">Dosen</option>
             <option value="staff">Staff</option>
@@ -437,21 +529,13 @@
       </div>
 
       <div class="field">
+        <label class="field-label">Password</label>
         <div class="input-wrap">
-          <input type="text" id="regRole" value="pelapor" readonly>
-          <span class="input-icon">🔒</span>
+          <input type="password" id="regPassword" placeholder="Min. 8 karakter" oninput="checkPassword(this.value)">
+          <button class="eye-btn" type="button" onclick="toggleEye('regPassword',this)"><i class="ti ti-eye"></i></button>
         </div>
-        <span class="autofill-tag">✦ Auto-fill: pelapor</span>
-      </div>
-
-      <div class="field">
-        <div class="input-wrap">
-          <input type="password" id="regPassword" placeholder="Password (Min. 8 karakter)" oninput="checkPassword(this.value)">
-          <button class="eye-btn" type="button" onclick="toggleEye('regPassword',this)">🔒</button>
-        </div>
-
         <div class="pw-strength" id="pwStrength">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 6px">
+          <div style="margin:7px 0 5px">
             <span class="strength-lbl" id="strengthLbl">Kekuatan Password</span>
           </div>
           <div class="bar-wrap">
@@ -465,23 +549,29 @@
             <li class="req-item" id="r-upper"><span class="req-dot"></span> Huruf kapital (A–Z)</li>
             <li class="req-item" id="r-lower"><span class="req-dot"></span> Huruf kecil (a–z)</li>
             <li class="req-item" id="r-num">  <span class="req-dot"></span> Angka (0–9)</li>
-            <li class="req-item" id="r-sym">  <span class="req-dot"></span> Simbol (!@#$% …)</li>
+            <li class="req-item" id="r-sym">  <span class="req-dot"></span> Simbol (!@#$%…)</li>
           </ul>
         </div>
       </div>
 
       <div class="field">
+        <label class="field-label">Konfirmasi Password</label>
         <div class="input-wrap">
-          <input type="password" id="regKonfirmasi" placeholder="Konfirmasi Password" oninput="checkConfirm()">
-          <button class="eye-btn" type="button" onclick="toggleEye('regKonfirmasi',this)">🔒</button>
+          <input type="password" id="regKonfirmasi" placeholder="Ulangi password kamu" oninput="checkConfirm()">
+          <button class="eye-btn" type="button" onclick="toggleEye('regKonfirmasi',this)"><i class="ti ti-eye"></i></button>
         </div>
       </div>
 
-      <button class="btn-blue" id="registerBtn" onclick="doRegister()">Daftar Sekarang</button>
-      <div class="divider">atau</div>
-      <div class="hint-text">Daftar dengan email aktif untuk verifikasi lebih mudah! 😊</div>
+      <!-- hidden role field kept for backend compatibility -->
+      <input type="hidden" id="regRole" value="pelapor">
+
+      <button class="btn-submit orange" id="registerBtn" onclick="doRegister()">
+        <i class="ti ti-user-plus"></i>
+        Daftar Sekarang
+      </button>
+
       <div class="switch-text">
-        Sudah memiliki akun? <a href="#" onclick="switchTo('login')">Masuk Disini</a>
+        Sudah punya akun? <a href="#" onclick="switchTo('login')">Masuk di sini</a>
       </div>
     </div>
 
@@ -493,10 +583,10 @@ function switchTo(page) {
   const isLogin = page === 'login';
   document.getElementById('loginSection').classList.toggle('active', isLogin);
   document.getElementById('registerSection').classList.toggle('active', !isLogin);
-  document.getElementById('pageTitle').textContent = isLogin ? 'Selamat Datang' : 'Bergabunglah';
+  document.getElementById('pageTitle').textContent = isLogin ? 'Halo, selamat datang!' : 'Yuk, bikin akun!';
   document.getElementById('pageDesc').textContent  = isLogin
-    ? 'Masuk akunmu dan lanjutkan pelaporan fasilitas yang rusak! 👋'
-    : 'Buat akunmu dan mari mulai laporin masalah fasilitas di kampus,\nBantu kami membuat kampus menjadi lebih baik! 😍';
+    ? 'Masuk biar kamu bisa bikin laporan dan pantau statusnya.'
+    : 'Daftar gratis dan mulai laporin fasilitas kampus yang perlu diperbaiki.';
   clearAlert();
 }
 
@@ -504,13 +594,14 @@ function toggleEye(id, btn) {
   const inp = document.getElementById(id);
   const isPass = inp.type === 'password';
   inp.type = isPass ? 'text' : 'password';
-  btn.textContent = isPass ? '🙈' : '🔒';
+  btn.innerHTML = isPass ? '<i class="ti ti-eye-off"></i>' : '<i class="ti ti-eye"></i>';
 }
 
 function showAlert(type, msg) {
   const el = document.getElementById('alertBox');
+  const icon = type === 'success' ? 'ti-circle-check' : type === 'error' ? 'ti-alert-circle' : 'ti-info-circle';
   el.className = `alert ${type} show`;
-  el.innerHTML = msg;
+  el.innerHTML = `<i class="ti ${icon}"></i> ${msg}`;
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 function clearAlert() {
@@ -530,28 +621,24 @@ function checkPassword(val) {
   const wrap = document.getElementById('pwStrength');
   if (!val) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'block';
-
   let passed = 0;
   for (const [id, fn] of Object.entries(rules)) {
-    const li   = document.getElementById(id);
-    const dot  = li.querySelector('.req-dot');
-    const ok   = fn(val);
+    const li = document.getElementById(id);
+    const dot = li.querySelector('.req-dot');
+    const ok = fn(val);
     li.className = 'req-item ' + (ok ? 'ok' : 'fail');
     dot.textContent = ok ? '✓' : '✕';
     if (ok) passed++;
   }
-
   const colors  = ['#ef4444','#f59e0b','#60a5fa','#22c55e'];
   const labels  = ['Sangat Lemah','Lemah','Cukup Kuat','Kuat','Sangat Kuat'];
   const strength = passed === 0 ? 0 : passed <= 2 ? 1 : passed <= 3 ? 2 : passed === 4 ? 3 : 4;
   ['s1','s2','s3','s4'].forEach((s,i) => {
-    document.getElementById(s).style.background =
-      i < strength ? colors[Math.min(strength-1,3)] : 'var(--border)';
+    document.getElementById(s).style.background = i < strength ? colors[Math.min(strength-1,3)] : 'var(--border)';
   });
   const lbl = document.getElementById('strengthLbl');
   lbl.textContent = labels[strength];
   lbl.style.color = strength < 2 ? '#ef4444' : strength < 4 ? '#f59e0b' : '#22c55e';
-
   checkConfirm();
 }
 
@@ -577,21 +664,18 @@ async function doRegister() {
   const konfirmasi = document.getElementById('regKonfirmasi').value;
 
   if (!nama || !email || !username || !kategori || !password || !konfirmasi)
-    return showAlert('error', '⚠ Semua field wajib diisi.');
-
+    return showAlert('error', 'Semua field wajib diisi dulu ya.');
   if (!isPasswordStrong(password))
-    return showAlert('error', '⚠ Password belum memenuhi semua persyaratan.');
-
+    return showAlert('error', 'Password belum memenuhi semua persyaratan.');
   if (password !== konfirmasi)
-    return showAlert('error', '⚠ Konfirmasi password tidak cocok.');
+    return showAlert('error', 'Konfirmasi password nggak cocok nih.');
 
   const btn = document.getElementById('registerBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Mendaftarkan...';
-  showAlert('info', '🔐 Mengenkripsi password dan menyimpan data...');
+  btn.innerHTML = '<span class="spinner"></span> Mendaftarkan...';
+  showAlert('info', 'Menyimpan data kamu...');
 
   const body = new URLSearchParams({ nama, email, username, password, konfirmasi, status_pengguna: kategori });
-
   try {
     const res  = await fetch('../../controllers/Register.php', { method: 'POST', body });
     const data = await res.json();
@@ -604,29 +688,26 @@ async function doRegister() {
       document.getElementById('pwStrength').style.display = 'none';
     }
   } catch (e) {
-    showAlert('error', '⚠ Gagal terhubung ke server.');
+    showAlert('error', 'Gagal terhubung ke server.');
   }
-
   btn.disabled = false;
-  btn.innerHTML = 'Daftar Sekarang';
+  btn.innerHTML = '<i class="ti ti-user-plus"></i> Daftar Sekarang';
 }
 
 async function doLogin() {
   clearAlert();
   const identifier = document.getElementById('loginIdentifier').value.trim();
   const password   = document.getElementById('loginPassword').value;
-  const remember   = document.getElementById('rememberMe').checked ? '1' : '0';
 
   if (!identifier || !password)
-    return showAlert('error', '⚠ Email/username dan password wajib diisi.');
+    return showAlert('error', 'Email/username dan password wajib diisi ya.');
 
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Memverifikasi...';
-  showAlert('info', '🔍 Memeriksa kredensial...');
+  btn.innerHTML = '<span class="spinner"></span> Memverifikasi...';
+  showAlert('info', 'Lagi ngecek kredensial kamu...');
 
-  const body = new URLSearchParams({ identifier, password, remember });
-
+  const body = new URLSearchParams({ identifier, password, remember: '0' });
   try {
     const res  = await fetch('../../controllers/Login.php', { method: 'POST', body });
     const data = await res.json();
@@ -634,20 +715,19 @@ async function doLogin() {
     if (data.status === 'success') {
       setTimeout(() => {
         const role = data.user.role;
-        if (role === 'admin') 
-            window.location.href = '../admin/dashboard/data.php';
-        else if (role === 'manager_teknisi') 
-            window.location.href = '../manager_teknisi/dashboard/data.php';
-        else 
-            window.location.href = '../pelapor/dashboard/data.php';
+        if (role === 'admin')
+          window.location.href = '../admin/dashboard/data.php';
+        else if (role === 'manager_teknisi')
+          window.location.href = '../manager_teknisi/dashboard/data.php';
+        else
+          window.location.href = '../pelapor/dashboard/data.php';
       }, 1500);
     }
   } catch (e) {
-    showAlert('error', '⚠ Gagal terhubung ke server.');
+    showAlert('error', 'Gagal terhubung ke server.');
   }
-
   btn.disabled = false;
-  btn.innerHTML = 'Masuk Sekarang';
+  btn.innerHTML = '<i class="ti ti-login"></i> Masuk Sekarang';
 }
 
 document.addEventListener('keydown', e => {

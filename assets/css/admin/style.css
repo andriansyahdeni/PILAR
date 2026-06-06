@@ -194,6 +194,13 @@ input::placeholder, textarea::placeholder { color: #9CB3C9; }
   body { overflow: auto; }
   #app { height: auto; min-height: 100vh; flex-direction: column; }
   .app-layout { flex-direction: column; height: auto; overflow: visible; }
+  .main-content {
+    padding: 1rem !important;
+    /* Sesuaikan tinggi ini dengan tinggi mobile-header Anda */
+    padding-top: 4rem !important; 
+    min-height: 100vh;
+    overflow: visible;
+  }
   
   /* Sidebar Drawer Ramping dari Samping Kiri Layar */
   .sidebar { 

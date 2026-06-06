@@ -109,66 +109,17 @@
 
         <div class="about-inner">
 
-            <div class="about-visual-wrap reveal">
-                <div class="about-mockup">
+            <div class="about-logo-wrap reveal">
+                <img src="assets/img/logo.png" class="about-logo" alt="Logo PILAR">
 
-                    <!-- header bar -->
-                    <div class="mock-topbar">
-                        <div class="mock-dot r"></div>
-                        <div class="mock-dot y"></div>
-                        <div class="mock-dot g"></div>
-                        <span>PILAR — Buat Laporan</span>
-                    </div>
+                <!-- <p class="about-logo-desc">
+                    Kepanjangan dari<br>
+                    <span>P·I·L·A·R</span>
+                </p> -->
 
-                    <!-- form card -->
-                    <div class="mock-body">
-
-                        <div class="mock-field">
-                            <label>Judul Laporan</label>
-                            <div class="mock-input">Proyektor kelas 3B mati total</div>
-                        </div>
-
-                        <div class="mock-field">
-                            <label>Lokasi</label>
-                            <div class="mock-input mock-input--icon">
-                                <i class="ti ti-map-pin" aria-hidden="true"></i>
-                                Gedung A, Lantai 3
-                            </div>
-                        </div>
-
-                        <div class="mock-field">
-                            <label>Foto Bukti</label>
-                            <div class="mock-upload">
-                                <i class="ti ti-camera" aria-hidden="true"></i>
-                                <span>foto_kerusakan.jpg</span>
-                                <span class="mock-upload-ok">
-                                    <i class="ti ti-check" aria-hidden="true"></i>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mock-field">
-                            <label>Status</label>
-                            <div class="mock-status-row">
-                                <span class="mock-badge mock-badge--yellow">
-                                    <i class="ti ti-clock" aria-hidden="true"></i>
-                                    Menunggu verifikasi
-                                </span>
-                            </div>
-                        </div>
-
-                        <button class="mock-btn" tabindex="-1">
-                            <i class="ti ti-send" aria-hidden="true"></i>
-                            Kirim Laporan
-                        </button>
-
-                    </div>
-
-                </div>
-
-                <p class="about-akronim">
-                    <strong>P</strong>usat <strong>I</strong>nformasi dan <strong>L</strong>aporan<strong> A</strong>set yang <strong>R</strong>usak
-                </p>
+                <!-- <div class="about-kepanjangan">
+                    <b><span class="word">Platform Informasi dan Laporan Asset yang Rusak</span></b>
+                </div> -->
             </div>
 
             <div class="about-content reveal reveal-d1">
@@ -289,7 +240,7 @@
                     <i class="ti ti-messages" aria-hidden="true"></i>
                 </div>
                 <h3>Chat Room</h3>
-                <p>Bisa ngobrol langsung sama admin atau manajer teknisi kalau ada info tambahan yang perlu disampaikan.</p>
+                <p>Bisa ngobrol langsung sama admin atau teknisi kalau ada info tambahan yang perlu disampaikan.</p>
             </div>
 
             <div class="feature-card reveal reveal-d1">
@@ -351,8 +302,8 @@
         <div class="footer-grid">
 
             <div class="footer-brand">
-                <img style="height: 100px;" src="assets/img/logo_vertikal.png" alt="PILAR">
-                <p>Pusat Informasi dan Laporan Aset yang Rusak. Satu klik untuk kampus yang lebih baik.</p>
+                <img src="assets/img/logo_vertikal.png" style="height: 100px;" alt="PILAR">
+                <p>Portal Informasi dan Pelaporan Fasilitas Kampus. Satu klik untuk kampus yang lebih baik.</p>
             </div>
 
             <div class="footer-col">
@@ -368,9 +319,9 @@
             <div class="footer-col">
                 <h4>Informasi</h4>
                 <ul>
-                    <li><a href="views/others/profile_team/profile_team.php"><i class="ti ti-users" aria-hidden="true"></i> Tentang Tim Pengembang</a></li>
-                    <!-- <li><a href="#"><i class="ti ti-lock" aria-hidden="true"></i> Kebijakan Privasi</a></li> -->
-                    <!-- <li><a href="#"><i class="ti ti-mail" aria-hidden="true"></i> Kontak</a></li> -->
+                    <li><a href="#"><i class="ti ti-users" aria-hidden="true"></i> Tentang Tim</a></li>
+                    <li><a href="#"><i class="ti ti-lock" aria-hidden="true"></i> Kebijakan Privasi</a></li>
+                    <li><a href="#"><i class="ti ti-mail" aria-hidden="true"></i> Kontak</a></li>
                 </ul>
             </div>
 
@@ -431,3 +382,62 @@
 
 </body>
 </html>
+
+
+
+buat narasi untuk halaman tentang tim pengembang, perbaiki narasi ini
+
+KABA DEV.
+(sertakan logo kabadev)
+Halo kami KABA DEV. pengembang dari website PILAR (Pusat Informasi dan Laporan Aset yang Rusak). Tim ini terbentuk dari adanya tugas project satu semester dalam mata kuliah Praktikum Pengembangan Perangkat Lunak di kelas S.Tr Teknologo Rekayasa Internet (PENS) dengan dosen pengampu Bapak Febby Ronaldo, S.Tr.T., M.Tr.Kom.
+
+-- SECTION PERKENALAN--
+(kiri foto)
+(kanan dekripsi)
+Febby Ronaldo, S.Tr.T., M.Tr.Kom
+Dosen Pengampu dan Scrum Master
+Bertugas untuk ...... dan melakukan pengawasan terhadap jalannya project PILAR.
+
+foto
+Deni Andriansyah
+2424600042
+Product Owner
+Bertugas untuk memimpin tim pengembang.....
+
+foto
+Cintamani Zahrotul Qudsy 
+2424600048
+Development Team 
+Bertugas untuk .....
+
+foto
+Muhammad Arfa’ Ubaidillah
+2424600034
+Development Team
+Bertugas untuk .....
+
+--SECTION DOKUMENTASI (macam galeri penempatan fotonya)--
+
+
+
+
+
+
+
+
+
+tanpa mengubah styling, buat styling berikut menjadi rapi dengan beberapa perbaikan berikut:
+
+buat galeri menjadi 8 foto dengan ukuran tertentu, jangan pakai ukuran asli karena itu terlalu besar, perkecil dengan tetap mempertahankan rasionya. atur posisisnya sesuai dengan ukuran vertikal horizontalnya foto
+foto horizontal: m2, m3, m5
+foto vertikal: m1, m4, m6, m7, m8
+
+untuk anggota, aku mau satu anggota satu section, fotonya besar di kiri atau kanan, dan di sampingnya baru ada keterangannya dia siapa, dll. Kalaj bisa tambahkan floating seperti halaman junbotron tadi (yang efek tulisan di dalam kotak di sekitar gambar)
+
+pada logo_kaba di bagian about, dia tidak tampil, padahal direktorinya sama dengan logo_kaba di halaman atas yang mana dia bisa tampil
+
+buat halaman lebih interaktif dengan animasi dan transisi setiap pengguliran
+
+pisahkan antara file utama dan css nya
+
+isi space space yang kosong, bisa dengan apapun, animasi atau sebagainya
